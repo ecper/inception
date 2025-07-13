@@ -9,9 +9,9 @@ DockerとDocker Composeを使用してLEMPスタック（Linux, Nginx, MariaDB, 
 - **MariaDB**: データベースサーバー
 
 ## ドキュメント
-- [アーキテクチャ概要](architecture.md)
-- [Dockerネットワーキング詳細](docker-networking.md)
-- [セットアップガイド](setup.md)
+- [アーキテクチャ概要](docs/architecture.md)
+- [Dockerネットワーキング詳細](docs/docker-networking.md)
+- [セットアップガイド](docs/setup.md)
 
 ### 各コンテナの詳細
 - [MariaDB](srcs/requirements/mariadb/mariadb-container.md)
