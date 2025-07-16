@@ -234,8 +234,9 @@ echo -e "${CYAN}11. FORBIDDEN PRACTICES CHECK${NC}"
 ! grep -r "sleep infinity\|tail -f\|while true" srcs/requirements/ > /dev/null 2>&1
 print_test $? "No infinite loops in containers"
 
-# Check if any ready-made images are pulled
-! grep -r "docker pull\|FROM.*:" srcs/requirements/ | grep -v "alpine\|debian" > /dev/null 2>&1
+# Check if any ready-made images are pulled (exclude alpine and debian)
+! grep -r "docker pull" srcs/requirements/ > /dev/null 2>&1 && \
+! grep -r "^FROM" srcs/requirements/ | grep -v "FROM alpine\|FROM debian" > /dev/null 2>&1
 print_test $? "No forbidden image pulls detected"
 echo ""
 
