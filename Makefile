@@ -1,8 +1,8 @@
 name = inception
 
 all:
-	@mkdir -p /home/uchida/data/wordpress
-	@mkdir -p /home/uchida/data/mariadb
+	@mkdir -p /home/hauchida/data/wordpress
+	@mkdir -p /home/hauchida/data/mariadb
 	@docker compose -f ./srcs/docker-compose.yml up -d --build
 
 down:
@@ -18,8 +18,8 @@ clean:
 
 fclean:
 	@docker compose -f ./srcs/docker-compose.yml down --volumes --rmi all
-	@sudo rm -rf /home/uchida/data/wordpress
-	@sudo rm -rf /home/uchida/data/mariadb
+	@sudo rm -rf /home/hauchida/data/wordpress
+	@sudo rm -rf /home/hauchida/data/mariadb
 	@docker system prune -a -f --volumes
 
 logs:

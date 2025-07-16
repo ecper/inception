@@ -16,13 +16,18 @@ RUN apk update && apk add --no-cache \
     php81-redis \
     php81-phar \
     wget \
-    tar
+    tar \
+    mysql-client
 
 RUN sed -i 's/listen = 127.0.0.1:9000/listen = 9000/g' /etc/php81/php-fpm.d/www.conf && \
     sed -i 's/;listen.owner = nobody/listen.owner = nobody/g' /etc/php81/php-fpm.d/www.conf && \
     sed -i 's/;listen.group = nobody/listen.group = nobody/g' /etc/php81/php-fpm.d/www.conf && \
     sed -i 's/;clear_env = no/clear_env = no/g' /etc/php81/php-fpm.d/www.conf && \
     echo 'php_admin_value[memory_limit] = 256M' >> /etc/php81/php-fpm.d/www.conf
+
+RUN wget https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar && \
+    chmod +x wp-cli.phar && \
+    mv wp-cli.phar /usr/local/bin/wp
 
 WORKDIR /var/www/html
 

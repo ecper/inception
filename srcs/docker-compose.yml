@@ -42,13 +42,13 @@ volumes:
     driver_opts:
       type: none
       o: bind
-      device: /home/uchida/data/wordpress
+      device: /home/hauchida/data/wordpress
   db-volume:
     driver: local
     driver_opts:
       type: none
       o: bind
-      device: /home/uchida/data/mariadb
+      device: /home/hauchida/data/mariadb
 
 networks:
   inception-network:

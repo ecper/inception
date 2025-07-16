@@ -77,7 +77,7 @@ else
     echo -e "${RED}✗ ボリュームがまだ存在します（$VOLUMES）${NC}"
 fi
 echo -n "データディレクトリ: "
-if [ ! -d "/home/uchida/data/wordpress" ] && [ ! -d "/home/uchida/data/mariadb" ]; then
+if [ ! -d "/home/hauchida/data/wordpress" ] && [ ! -d "/home/hauchida/data/mariadb" ]; then
     echo -e "${GREEN}✓ データディレクトリが削除されました${NC}"
 else
     echo -e "${RED}✗ データディレクトリがまだ存在します${NC}"

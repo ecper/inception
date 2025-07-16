@@ -103,7 +103,7 @@ docker volume ls | grep -E "(wp-volume|db-volume|VOLUME)"
 echo ""
 
 echo "ホストディレクトリ:"
-ls -la /home/uchida/data/ 2>/dev/null || echo "データディレクトリが見つかりません"
+ls -la /home/hauchida/data/ 2>/dev/null || echo "データディレクトリが見つかりません"
 echo ""
 
 # 7. プロセスの確認

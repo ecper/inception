@@ -14,8 +14,8 @@ sudo echo "127.0.0.1 hauchida.42.fr" >> /etc/hosts
 
 ### 2. データディレクトリの作成
 ```bash
-sudo mkdir -p /home/uchida/data/wordpress
-sudo mkdir -p /home/uchida/data/mariadb
+sudo mkdir -p /home/hauchida/data/wordpress
+sudo mkdir -p /home/hauchida/data/mariadb
 ```
 
 ### 3. 環境変数の設定
@@ -27,7 +27,7 @@ cp .env.example .env
 
 ### 4. プロジェクトのビルドと起動
 ```bash
-cd /home/uchida/Documents/fov-prog/42cursus/inception
+cd /home/hauchida/Documents/fov-prog/42cursus/inception
 make
 ```
 
@@ -68,7 +68,7 @@ sudo lsof -i :443
 
 ### パーミッションエラー
 ```bash
-sudo chown -R $USER:$USER /home/uchida/data/
+sudo chown -R $USER:$USER /home/hauchida/data/
 ```
 
 ### コンテナが起動しない
