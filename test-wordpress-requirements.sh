@@ -54,11 +54,12 @@ if docker ps | grep -q wordpress; then
         echo -e "${RED}✗ 有効な管理者ユーザーが見つかりません${NC}"
     fi
     
-    # 通常ユーザーの確認
-    REGULAR_USERS=$(docker exec wordpress wp user list --role=author,editor,contributor,subscriber --allow-root 2>/dev/null | wc -l)
-    if [ "$REGULAR_USERS" -gt 1 ]; then  # ヘッダー行を除く
+    # 通常ユーザーの確認（管理者以外のユーザー）
+    ALL_USERS=$(docker exec wordpress wp user list --allow-root 2>/dev/null | tail -n +2)  # ヘッダー行を除く
+    REGULAR_USERS=$(echo "$ALL_USERS" | grep -v "administrator" | wc -l)
+    if [ "$REGULAR_USERS" -gt 0 ]; then
         echo -e "${GREEN}✓ 通常ユーザーが存在します:${NC}"
-        docker exec wordpress wp user list --role=author,editor,contributor,subscriber --allow-root 2>/dev/null
+        echo "$ALL_USERS" | grep -v "administrator"
     else
         echo -e "${RED}✗ 通常ユーザーが見つかりません${NC}"
     fi
