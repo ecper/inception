@@ -15,7 +15,7 @@
 2. **Docker構成**
    - ✅ Docker Composeを使用
    - ✅ 各サービスが専用コンテナで実行
-   - ✅ Alpine Linux 3.18を使用（penultimate stable version）
+   - ✅ Alpine Linux 3.21を使用（penultimate stable version - 2024年12月時点）
    - ✅ 独自のDockerfileを作成（DockerHub不使用）
    - ✅ restart: always設定あり
 

@@ -41,11 +41,16 @@ services:
 
 ## ベースイメージ
 
-### Alpine Linux 3.18 を選択した理由
+### Alpine Linux 3.21 を選択した理由
 
 ```dockerfile
-FROM alpine:3.18  # 5MB以下の超軽量イメージ
+FROM alpine:3.21  # Penultimate stable version (最新から2番目の安定版)
 ```
+
+**バージョン選択の根拠：**
+- 最新版(3.22): 最新すぎて互換性問題の可能性
+- **Penultimate(3.21)**: 安定性と新機能のバランス ← 選択
+- 古いバージョン(3.18等): セキュリティサポート終了のリスク
 
 **選択理由：**
 
@@ -53,11 +58,13 @@ FROM alpine:3.18  # 5MB以下の超軽量イメージ
    - 最小限のパッケージ = 攻撃対象領域の削減
    - musl libcによるメモリ安全性の向上
    - 定期的なセキュリティアップデート
+   - 2026年11月までのセキュリティサポート保証
 
 2. **パフォーマンス**
    - イメージサイズ: Alpine(~5MB) vs Debian(~120MB)
    - 起動時間: 数秒での起動が可能
    - メモリ使用量: 最小限のフットプリント
+   - PHP 8.3による最新のパフォーマンス最適化
 
 3. **パッケージ管理**
    ```bash
@@ -218,9 +225,9 @@ networks:
 
 ```dockerfile
 # 例: ビルドステージと実行ステージの分離
-FROM alpine:3.18 as builder
+FROM alpine:3.21 as builder
 # ビルド処理
-FROM alpine:3.18
+FROM alpine:3.21
 COPY --from=builder /app /app
 ```
 
