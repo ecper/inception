@@ -29,6 +29,17 @@ if [ ! -f /var/www/html/wp-config.php ]; then
     sed -i "/put your unique phrase here/d" wp-config.php
     echo "$SALT" >> wp-config.php
     
+    # Add HTTPS and URL settings for proper login
+    echo "" >> wp-config.php
+    echo "/* HTTPS and URL Configuration */" >> wp-config.php
+    echo "define('WP_HOME', 'https://$DOMAIN_NAME');" >> wp-config.php
+    echo "define('WP_SITEURL', 'https://$DOMAIN_NAME');" >> wp-config.php
+    echo "if (isset(\$_SERVER['HTTP_X_FORWARDED_PROTO']) && \$_SERVER['HTTP_X_FORWARDED_PROTO'] === 'https') {" >> wp-config.php
+    echo "    \$_SERVER['HTTPS'] = 'on';" >> wp-config.php
+    echo "}" >> wp-config.php
+    echo "define('FORCE_SSL_ADMIN', true);" >> wp-config.php
+    echo "define('FORCE_SSL_LOGIN', true);" >> wp-config.php
+    
     # Wait for database
     while ! mysqladmin ping -h mariadb -u $WORDPRESS_DB_USER -p$WORDPRESS_DB_PASSWORD --silent; do
         echo "Waiting for database..."
