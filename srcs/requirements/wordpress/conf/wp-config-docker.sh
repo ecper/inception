@@ -24,21 +24,34 @@ if [ ! -f /var/www/html/wp-config.php ]; then
     sed -i "s/password_here/$WORDPRESS_DB_PASSWORD/g" wp-config.php
     sed -i "s/localhost/$WORDPRESS_DB_HOST/g" wp-config.php
     
-    # Add salts
-    SALT=$(wget -qO- https://api.wordpress.org/secret-key/1.1/salt/)
-    sed -i "/put your unique phrase here/d" wp-config.php
-    echo "$SALT" >> wp-config.php
+    # Remove the default salt definitions
+    sed -i "/define( 'AUTH_KEY'/d" wp-config.php
+    sed -i "/define( 'SECURE_AUTH_KEY'/d" wp-config.php
+    sed -i "/define( 'LOGGED_IN_KEY'/d" wp-config.php
+    sed -i "/define( 'NONCE_KEY'/d" wp-config.php
+    sed -i "/define( 'AUTH_SALT'/d" wp-config.php
+    sed -i "/define( 'SECURE_AUTH_SALT'/d" wp-config.php
+    sed -i "/define( 'LOGGED_IN_SALT'/d" wp-config.php
+    sed -i "/define( 'NONCE_SALT'/d" wp-config.php
     
-    # Add HTTPS and URL settings for proper login
-    echo "" >> wp-config.php
-    echo "/* HTTPS and URL Configuration */" >> wp-config.php
-    echo "define('WP_HOME', 'https://$DOMAIN_NAME');" >> wp-config.php
-    echo "define('WP_SITEURL', 'https://$DOMAIN_NAME');" >> wp-config.php
-    echo "if (isset(\$_SERVER['HTTP_X_FORWARDED_PROTO']) && \$_SERVER['HTTP_X_FORWARDED_PROTO'] === 'https') {" >> wp-config.php
-    echo "    \$_SERVER['HTTPS'] = 'on';" >> wp-config.php
-    echo "}" >> wp-config.php
-    echo "define('FORCE_SSL_ADMIN', true);" >> wp-config.php
-    echo "define('FORCE_SSL_LOGIN', true);" >> wp-config.php
+    # Add custom configuration BEFORE the "That's all, stop editing!" line
+    sed -i "/\/\* That's all, stop editing!/i\\
+\\
+/* HTTPS and URL Configuration */\\
+define('WP_HOME', 'https://$DOMAIN_NAME');\\
+define('WP_SITEURL', 'https://$DOMAIN_NAME');\\
+if (isset(\$_SERVER['HTTP_X_FORWARDED_PROTO']) && \$_SERVER['HTTP_X_FORWARDED_PROTO'] === 'https') {\\
+    \$_SERVER['HTTPS'] = 'on';\\
+}\\
+define('FORCE_SSL_ADMIN', true);\\
+\\
+/* Authentication Unique Keys and Salts */" wp-config.php
+    
+    # Add salts from WordPress API
+    SALT=$(wget -qO- https://api.wordpress.org/secret-key/1.1/salt/)
+    # Insert salts before "That's all, stop editing!" line
+    sed -i "/\/\* That's all, stop editing!/i\\
+$SALT" wp-config.php
     
     # Wait for database
     while ! mysqladmin ping -h mariadb -u $WORDPRESS_DB_USER -p$WORDPRESS_DB_PASSWORD --silent; do
@@ -81,8 +94,8 @@ if [ ! -f /var/www/html/wp-config.php ]; then
         --user_pass=$WORDPRESS_USER_PASSWORD \
         --allow-root"
     
-    # Set proper permissions
-    chown -R www-data:www-data /var/www/html
+    # Set proper permissions (nobody for Alpine)
+    chown -R nobody:nobody /var/www/html
     
     echo "WordPress installation completed!"
     echo "Admin user: $WORDPRESS_ADMIN_USER"
