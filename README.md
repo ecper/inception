@@ -9,19 +9,10 @@ DockerとDocker Composeを使用してLEMPスタック（Linux, Nginx, MariaDB, 
 - **MariaDB**: データベースサーバー
 
 ## ドキュメント
-
-### 概要・設計
-- [技術選定の理由と根拠](TECHNICAL_DECISIONS.md) - **なぜこの技術を使うのか**
-- [Debian移行ガイド](docs/DEBIAN_MIGRATION.md) - **Alpine→Debianへの変更詳細**
-- [要件チェックレポート](REQUIREMENTS_CHECK.md) - プロジェクト要件の適合性
+- [技術選定の理由と根拠](docs/technical.md)
 - [アーキテクチャ概要](docs/architecture.md)
 - [Dockerネットワーキング詳細](docs/docker-networking.md)
 - [セットアップガイド](docs/setup.md)
-
-### 各サービスの詳細解説
-- [NGINX詳細解説](docs/NGINX_DETAILED.md) - **Dockerfile、nginx.conf、SSL/TLS設定の完全解説**
-- [MariaDB詳細解説](docs/MARIADB_DETAILED.md) - **Dockerfile、create_db.sh、初期化プロセスの完全解説**  
-- [WordPress詳細解説](docs/WORDPRESS_DETAILED.md) - **Dockerfile、wp-config-docker.sh、PHP-FPM設定の完全解説**
 
 ### 各コンテナの詳細
 - [MariaDB](srcs/requirements/mariadb/mariadb-container.md)

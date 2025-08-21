@@ -28,7 +28,7 @@ GRANT ALL PRIVILEGES ON $MYSQL_DATABASE.* TO '$MYSQL_USER'@'%';
 FLUSH PRIVILEGES;
 EOF
 
-    /usr/sbin/mysqld --user=mysql --bootstrap < $tfile
+    /usr/bin/mysqld --user=mysql --bootstrap < $tfile
     rm -f $tfile
 fi
 

@@ -1,9 +1,6 @@
-FROM debian:bullseye
+FROM alpine:3.18
 
-RUN apt-get update && apt-get install -y \
-    nginx \
-    openssl \
-    && rm -rf /var/lib/apt/lists/*
+RUN apk update && apk add --no-cache nginx openssl
 
 RUN mkdir -p /etc/nginx/ssl
 

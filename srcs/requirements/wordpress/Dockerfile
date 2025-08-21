@@ -1,30 +1,29 @@
-FROM debian:bullseye
+FROM alpine:3.18
 
-RUN apt-get update && apt-get install -y \
-    php7.4 \
-    php7.4-fpm \
-    php7.4-mysql \
-    php7.4-json \
-    php7.4-curl \
-    php7.4-dom \
-    php7.4-exif \
-    php7.4-fileinfo \
-    php7.4-mbstring \
-    php7.4-xml \
-    php7.4-zip \
-    php7.4-redis \
+RUN apk update && apk add --no-cache \
+    php81 \
+    php81-fpm \
+    php81-mysqli \
+    php81-json \
+    php81-curl \
+    php81-dom \
+    php81-exif \
+    php81-fileinfo \
+    php81-mbstring \
+    php81-openssl \
+    php81-xml \
+    php81-zip \
+    php81-redis \
+    php81-phar \
     wget \
     tar \
-    mariadb-client \
-    && rm -rf /var/lib/apt/lists/*
+    mysql-client
 
-RUN sed -i 's/listen = \/run\/php\/php7.4-fpm.sock/listen = 9000/g' /etc/php/7.4/fpm/pool.d/www.conf && \
-    sed -i 's/;listen.owner = www-data/listen.owner = www-data/g' /etc/php/7.4/fpm/pool.d/www.conf && \
-    sed -i 's/;listen.group = www-data/listen.group = www-data/g' /etc/php/7.4/fpm/pool.d/www.conf && \
-    sed -i 's/;clear_env = no/clear_env = no/g' /etc/php/7.4/fpm/pool.d/www.conf && \
-    echo 'php_admin_value[memory_limit] = 256M' >> /etc/php/7.4/fpm/pool.d/www.conf
-
-RUN mkdir -p /run/php
+RUN sed -i 's/listen = 127.0.0.1:9000/listen = 9000/g' /etc/php81/php-fpm.d/www.conf && \
+    sed -i 's/;listen.owner = nobody/listen.owner = nobody/g' /etc/php81/php-fpm.d/www.conf && \
+    sed -i 's/;listen.group = nobody/listen.group = nobody/g' /etc/php81/php-fpm.d/www.conf && \
+    sed -i 's/;clear_env = no/clear_env = no/g' /etc/php81/php-fpm.d/www.conf && \
+    echo 'php_admin_value[memory_limit] = 256M' >> /etc/php81/php-fpm.d/www.conf
 
 RUN wget https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar && \
     chmod +x wp-cli.phar && \
@@ -39,4 +38,4 @@ EXPOSE 9000
 
 ENTRYPOINT ["/usr/local/bin/wp-config-docker.sh"]
 
-CMD ["/usr/sbin/php-fpm7.4", "-F"]
+CMD ["/usr/sbin/php-fpm81", "-F"]

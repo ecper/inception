@@ -1,9 +1,6 @@
-FROM debian:bullseye
+FROM alpine:3.18
 
-RUN apt-get update && apt-get install -y \
-    mariadb-server \
-    mariadb-client \
-    && rm -rf /var/lib/apt/lists/*
+RUN apk update && apk add --no-cache mariadb mariadb-client
 
 RUN mkdir -p /var/run/mysqld \
     && chown -R mysql:mysql /var/run/mysqld \
@@ -16,4 +13,4 @@ RUN chmod +x /usr/local/bin/create_db.sh
 
 ENTRYPOINT ["/usr/local/bin/create_db.sh"]
 
-CMD ["/usr/sbin/mysqld", "--user=mysql", "--console", "--skip-networking=0", "--bind-address=0.0.0.0"]
+CMD ["/usr/bin/mysqld", "--user=mysql", "--console", "--skip-networking=0", "--bind-address=0.0.0.0"]
