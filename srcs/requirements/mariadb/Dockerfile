@@ -1,6 +1,9 @@
-FROM alpine:3.21
+FROM debian:bullseye
 
-RUN apk update && apk add --no-cache mariadb mariadb-client
+RUN apt-get update && apt-get install -y \
+    mariadb-server \
+    mariadb-client \
+    && rm -rf /var/lib/apt/lists/*
 
 RUN mkdir -p /var/run/mysqld \
     && chown -R mysql:mysql /var/run/mysqld \

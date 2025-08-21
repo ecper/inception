@@ -71,7 +71,7 @@ if [ ! -f /var/www/html/wp-config.php ]; then
         --allow-root"
     
     # Set proper permissions
-    chown -R nobody:nobody /var/www/html
+    chown -R www-data:www-data /var/www/html
     
     echo "WordPress installation completed!"
     echo "Admin user: $WORDPRESS_ADMIN_USER"

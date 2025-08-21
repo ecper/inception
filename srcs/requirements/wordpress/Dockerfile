@@ -1,29 +1,30 @@
-FROM alpine:3.21
+FROM debian:bullseye
 
-RUN apk update && apk add --no-cache \
-    php83 \
-    php83-fpm \
-    php83-mysqli \
-    php83-json \
-    php83-curl \
-    php83-dom \
-    php83-exif \
-    php83-fileinfo \
-    php83-mbstring \
-    php83-openssl \
-    php83-xml \
-    php83-zip \
-    php83-redis \
-    php83-phar \
+RUN apt-get update && apt-get install -y \
+    php7.4 \
+    php7.4-fpm \
+    php7.4-mysql \
+    php7.4-json \
+    php7.4-curl \
+    php7.4-dom \
+    php7.4-exif \
+    php7.4-fileinfo \
+    php7.4-mbstring \
+    php7.4-xml \
+    php7.4-zip \
+    php7.4-redis \
     wget \
     tar \
-    mysql-client
+    mariadb-client \
+    && rm -rf /var/lib/apt/lists/*
 
-RUN sed -i 's/listen = 127.0.0.1:9000/listen = 9000/g' /etc/php83/php-fpm.d/www.conf && \
-    sed -i 's/;listen.owner = nobody/listen.owner = nobody/g' /etc/php83/php-fpm.d/www.conf && \
-    sed -i 's/;listen.group = nobody/listen.group = nobody/g' /etc/php83/php-fpm.d/www.conf && \
-    sed -i 's/;clear_env = no/clear_env = no/g' /etc/php83/php-fpm.d/www.conf && \
-    echo 'php_admin_value[memory_limit] = 256M' >> /etc/php83/php-fpm.d/www.conf
+RUN sed -i 's/listen = \/run\/php\/php7.4-fpm.sock/listen = 9000/g' /etc/php/7.4/fpm/pool.d/www.conf && \
+    sed -i 's/;listen.owner = www-data/listen.owner = www-data/g' /etc/php/7.4/fpm/pool.d/www.conf && \
+    sed -i 's/;listen.group = www-data/listen.group = www-data/g' /etc/php/7.4/fpm/pool.d/www.conf && \
+    sed -i 's/;clear_env = no/clear_env = no/g' /etc/php/7.4/fpm/pool.d/www.conf && \
+    echo 'php_admin_value[memory_limit] = 256M' >> /etc/php/7.4/fpm/pool.d/www.conf
+
+RUN mkdir -p /run/php
 
 RUN wget https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar && \
     chmod +x wp-cli.phar && \
@@ -38,4 +39,4 @@ EXPOSE 9000
 
 ENTRYPOINT ["/usr/local/bin/wp-config-docker.sh"]
 
-CMD ["/usr/sbin/php-fpm83", "-F"]
+CMD ["/usr/sbin/php-fpm7.4", "-F"]

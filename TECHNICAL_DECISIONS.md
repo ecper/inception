@@ -41,35 +41,41 @@ services:
 
 ## ベースイメージ
 
-### Alpine Linux 3.21 を選択した理由
+### Debian 11 (Bullseye) を選択した理由
 
 ```dockerfile
-FROM alpine:3.21  # Penultimate stable version (最新から2番目の安定版)
+FROM debian:bullseye  # Penultimate stable version (最新から2番目の安定版)
 ```
 
 **バージョン選択の根拠：**
-- 最新版(3.22): 最新すぎて互換性問題の可能性
-- **Penultimate(3.21)**: 安定性と新機能のバランス ← 選択
-- 古いバージョン(3.18等): セキュリティサポート終了のリスク
+- 最新版(Debian 12 Bookworm): 最新すぎて互換性問題の可能性
+- **Penultimate(Debian 11 Bullseye)**: 安定性と新機能のバランス ← 選択
+- 古いバージョン(Debian 10 Buster等): セキュリティサポート終了のリスク
 
 **選択理由：**
 
 1. **セキュリティ**
-   - 最小限のパッケージ = 攻撃対象領域の削減
-   - musl libcによるメモリ安全性の向上
+   - 長期サポート(LTS): 2026年まで
+   - 成熟したパッケージ管理システム(APT)
    - 定期的なセキュリティアップデート
-   - 2026年11月までのセキュリティサポート保証
+   - 広範なコミュニティサポート
 
-2. **パフォーマンス**
-   - イメージサイズ: Alpine(~5MB) vs Debian(~120MB)
-   - 起動時間: 数秒での起動が可能
-   - メモリ使用量: 最小限のフットプリント
-   - PHP 8.3による最新のパフォーマンス最適化
+2. **安定性**
+   - エンタープライズグレードの安定性
+   - 豊富なパッケージリポジトリ
+   - 予測可能なリリースサイクル
+   - PHP 7.4の安定版を使用
 
 3. **パッケージ管理**
    ```bash
-   apk add --no-cache nginx  # キャッシュを残さないクリーンなインストール
+   apt-get update && apt-get install -y nginx
+   rm -rf /var/lib/apt/lists/*  # キャッシュクリーンアップ
    ```
+
+4. **互換性**
+   - より多くのソフトウェアが標準でサポート
+   - glibcによる広範な互換性
+   - デバッグツールの充実
 
 ## 各サービスの技術選定
 
@@ -225,9 +231,9 @@ networks:
 
 ```dockerfile
 # 例: ビルドステージと実行ステージの分離
-FROM alpine:3.21 as builder
+FROM debian:bullseye as builder
 # ビルド処理
-FROM alpine:3.21
+FROM debian:bullseye
 COPY --from=builder /app /app
 ```
 
@@ -238,7 +244,8 @@ COPY --from=builder /app /app
 ### 2. キャッシュ戦略
 
 ```dockerfile
-RUN apk add --no-cache nginx  # APKキャッシュを残さない
+RUN apt-get update && apt-get install -y nginx \
+    && rm -rf /var/lib/apt/lists/*  # APTキャッシュを削除
 ```
 
 **理由：**
