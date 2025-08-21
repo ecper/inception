@@ -16,4 +16,4 @@ RUN chmod +x /usr/local/bin/create_db.sh
 
 ENTRYPOINT ["/usr/local/bin/create_db.sh"]
 
-CMD ["/usr/bin/mysqld", "--user=mysql", "--console", "--skip-networking=0", "--bind-address=0.0.0.0"]
+CMD ["/usr/sbin/mysqld", "--user=mysql", "--console", "--skip-networking=0", "--bind-address=0.0.0.0"]
